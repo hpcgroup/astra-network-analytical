@@ -20,13 +20,11 @@ set(BUILDTARGET "all" CACHE STRING "Compilation target ([all]/congestion_unaware
 option(NETWORK_BACKEND_BUILD_AS_LIBRARY "Build as a library" OFF)
 
 # Add external libraries
-include(FetchContent)
-FetchContent_Declare(
-    yaml-cpp
-    GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
-    GIT_TAG a83cd31 # Current as of 2025-10-01
-)
-FetchContent_MakeAvailable(yaml-cpp)
+# Use local yaml-cpp instead of FetchContent to avoid git operations
+# Only add yaml-cpp if it hasn't been added yet (avoids duplicate targets when building with main AstraSim)
+if(NOT TARGET yaml-cpp)
+    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/extern/yaml-cpp")
+endif()
 
 # Include src files to compile
 file(GLOB srcs_common

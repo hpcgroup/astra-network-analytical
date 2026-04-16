@@ -19,13 +19,8 @@ option(NETWORK_BACKEND_BUILD_AS_LIBRARY "Build as a library" ON)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/.. analytical)
 
 # Compile GoogleTest
-include(FetchContent)
-FetchContent_Declare(
-    googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG 1204d63 # Commit of 2024-10-31
-)
-FetchContent_MakeAvailable(googletest)
+# Use local googletest instead of FetchContent to avoid git operations
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/googletest")
 include(GoogleTest)
 
 # Compile Congestion Unaware Backend
