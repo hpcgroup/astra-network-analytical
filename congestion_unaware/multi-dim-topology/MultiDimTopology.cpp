@@ -98,8 +98,10 @@ MultiDimTopology::MultiDimAddress MultiDimTopology::translate_address(const Devi
 
 int MultiDimTopology::get_dim_to_transfer(const MultiDimAddress& src_address,
                                           const MultiDimAddress& dest_address) const noexcept {
-    for (auto dim = 0; dim < dims_count; dim++) {
-        // check the dim that has different address
+    // Scan from the outermost (slowest) dim down. When a transfer crosses
+    // multiple dims at once (e.g. a flat ring hop that crosses a node
+    // boundary), the slowest link physically dominates, so charge that one.
+    for (auto dim = dims_count - 1; dim >= 0; dim--) {
         if (src_address[dim] != dest_address[dim]) {
             return dim;
         }
